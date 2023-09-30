@@ -1,2 +1,2 @@
 FROM alpine
-RUN apk upgrade && apk add cmake g++ 
+RUN apk upgrade && apk add cmake g++ make
