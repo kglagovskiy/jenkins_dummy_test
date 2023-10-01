@@ -36,10 +36,8 @@ pipeline {
             }
             post {
                 always {
-                    archiveArtifacts
-                        artifacts: 'build/Testing/**/*.xml',
-                        fingerprint: true
-                    xunit
+                    archiveArtifacts artifacts: 'Testing/**/*.xml'
+                    xunit 
                         testTimeMargin: '3000',
                         thresholdMode: 1,
                         thresholds: [
