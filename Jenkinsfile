@@ -8,10 +8,10 @@ pipeline {
     environment {
         EMAIL_TO = 'allerill@gmail.com'
     }
-	parameters {
-		booleanParam name: 'RUN_TESTS', defaultValue: true, description: 'Run Tests?'
-		booleanParam name: 'DEPLOY', defaultValue: true, description: 'Deploy Artifacts?'
-	}
+	// parameters {
+	// 	booleanParam name: 'RUN_TESTS', defaultValue: true, description: 'Run Tests?'
+	// 	booleanParam name: 'DEPLOY', defaultValue: true, description: 'Deploy Artifacts?'
+	// }
     stages {
         stage('Build') {
             steps {
