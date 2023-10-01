@@ -32,8 +32,7 @@ pipeline {
             // }
             steps {
                 echo 'Testing'
-                ctest installation: 'InSearchPath'
-                    arguments: '-T test'
+                sh 'ctest -T test --no-compress-output'
             }
             // post {
             //     always {
