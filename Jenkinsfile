@@ -42,6 +42,7 @@ pipeline {
                     //     skipped(failureThreshold: '0')
                     //     failed(failureThreshold: '0')
                     //     ]
+                }
             }        
         }
         stage('Deploy') {
