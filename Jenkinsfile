@@ -27,7 +27,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing'
-                cmakeBuild arguments:'-T test',installation: 'InSearchPath'
+                ctest arguments:'-T test',installation: 'InSearchPath'
             }
             post {
                 always {
