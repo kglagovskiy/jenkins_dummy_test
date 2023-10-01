@@ -37,13 +37,12 @@ pipeline {
             post {
                 always {
                     archiveArtifacts artifacts: 'Testing/**/*.xml'
-                    xunit 
-                        testTimeMargin: '3000',
-                        thresholdMode: 1,
+                    xunit testTimeMargin: '3000'
+                        thresholdMode: 1
                         thresholds: [
-                        skipped(failureThreshold: '0'),
+                        skipped(failureThreshold: '0')
                         failed(failureThreshold: '0')
-                        ],
+                        ]
                     tools: [CTest(
                         pattern: 'Testing/**/*.xml',
                         deleteOutputFiles: true,
