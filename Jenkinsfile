@@ -7,11 +7,10 @@ pipeline {
     }
     environment {
         EMAIL_TO = 'allerill@gmail.com'
-    }
-	// parameters {
-	// 	booleanParam name: 'RUN_TESTS', defaultValue: true, description: 'Run Tests?'
-	// 	booleanParam name: 'DEPLOY', defaultValue: true, description: 'Deploy Artifacts?'
-	// }
+    
+     	booleanParam name: 'RUN_TESTS', defaultValue: true, description: 'Run Tests?'
+	 	booleanParam name: 'DEPLOY', defaultValue: true, description: 'Deploy Artifacts?'
+	}
     stages {
         stage('Build') {
             steps {
@@ -27,35 +26,35 @@ pipeline {
             }
         }
         stage('Test') {
-            // when {
-            //     parameters name: 'RUN_TESTS', value: 'true'
-            // }
+            when {
+                environment name: 'RUN_TESTS', value: 'true'
+            }
             steps {
                 echo 'Testing'
-                sh 'ctest -T test --no-compress-output'
+                cmakeBuild arguments:'-T test',installation: 'InSearchPath'
             }
-            post {
-                always {
-                    archiveArtifacts artifacts: 'Testing/**/*.xml'
-            //         xunit testTimeMargin: '3000'
+            // post {
+            //     always {
+            //         archiveArtifacts artifacts: 'Testing/**/*.xml'
+            //         xunit checksName:'',testTimeMargin: '3000'
             //             thresholdMode: 1
             //             thresholds: [
             //             skipped(failureThreshold: '0')
             //             failed(failureThreshold: '0')
             //             ]
-            //         tools: [CTest(
-            //             pattern: 'Testing/**/*.xml',
-            //             deleteOutputFiles: true,
-            //             failIfNotNew: false,
-            //             skipNoTestFiles: true,
-            //             stopProcessingIfError: true
-            //             )]
+            // //         tools: [CTest(
+            // //             pattern: 'Testing/**/*.xml',
+            // //             deleteOutputFiles: true,
+            // //             failIfNotNew: false,
+            // //             skipNoTestFiles: true,
+            // //             stopProcessingIfError: true
+            // //             )]
             // }        
         }
         stage('Deploy') {
-            // when {
-            //     parameters name: 'DEPLOY', value: 'true'
-            // }
+            when {
+                environment name: 'DEPLOY', value: 'true'
+            }
             steps {
                 echo 'Deploying'
             }
