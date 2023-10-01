@@ -35,19 +35,12 @@ pipeline {
                     xunit([
                         CTest(pattern: 'Testing/**/*.xml')
                     ])
-
-                    // xunit checksName:'',testTimeMargin: '3000'
-                    //     thresholdMode: 1
-                    //     thresholds: [
-                    //     skipped(failureThreshold: '0')
-                    //     failed(failureThreshold: '0')
-                    //     ]
                 }
             }        
         }
         stage('Deploy') {
             when {
-                expression { abort_pipeline}
+                expression {abort_pipeline}
             }
             steps {
                 echo 'Deploying'
