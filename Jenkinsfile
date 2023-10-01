@@ -32,8 +32,8 @@ pipeline {
             // }
             steps {
                 echo 'Testing'
-                ctest installation: 'InSearchPath' 
-                    // arguments: '--output-junit test.xml'
+                ctest installation: 'InSearchPath'
+                    arguments: '-T test'
             }
             // post {
             //     always {
