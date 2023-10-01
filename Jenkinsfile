@@ -5,6 +5,9 @@ pipeline {
             dir 'dev'
         }
     }
+    environment {
+        EMAIL_TO = 'allerill@gmail.com'
+    }
 	parameters {
 		booleanParam name: 'RUN_TESTS', defaultValue: true, description: 'Run Tests?'
 		booleanParam name: 'DEPLOY', defaultValue: true, description: 'Deploy Artifacts?'
@@ -13,25 +16,47 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building'
-                sh "cmake . && make"
+                cmakeBuild installation: 'InSearchPath'
+            }
+            post {
+                failure {
+                    emailext body: 'Building failed', 
+                        to: "${EMAIL_TO}", 
+                        subject: 'Building failed'
+                }
             }
         }
         stage('Test') {
             when {
-                environment name: 'RUN_TESTS', value: 'true'
+                parameters name: 'RUN_TESTS', value: 'true'
             }
             steps {
                 echo 'Testing'
-                sh "make test"
+                ctest installation: 'InSearchPath' arguments: '--output-junit test.xml'
             }
+            // post {
+            //     always {
+            //         junit(
+            //             allowEmptyResults: true,
+            //             testResults: '**/test-reports/*.xml'
+            //         )
+            //     }
+            // }        
         }
         stage('Deploy') {
             when {
-                environment name: 'DEPLOY', value: 'true'
+                parameters name: 'DEPLOY', value: 'true'
             }
             steps {
                 echo 'Deploying'
             }
+            post {
+                success {
+                    emailext body: 'Deploying completed\n Congratulations !', 
+                        to: "${EMAIL_TO}", 
+                        subject: 'Deploying completed'
+                }
+            }  
         }
     }
 }
