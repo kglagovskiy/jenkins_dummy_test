@@ -27,9 +27,9 @@ pipeline {
             }
         }
         stage('Test') {
-            when {
-                parameters name: 'RUN_TESTS', value: 'true'
-            }
+            // when {
+            //     parameters name: 'RUN_TESTS', value: 'true'
+            // }
             steps {
                 echo 'Testing'
                 ctest installation: 'InSearchPath' 
@@ -45,9 +45,9 @@ pipeline {
             // }        
         }
         stage('Deploy') {
-            when {
-                parameters name: 'DEPLOY', value: 'true'
-            }
+            // when {
+            //     parameters name: 'DEPLOY', value: 'true'
+            // }
             steps {
                 echo 'Deploying'
             }
