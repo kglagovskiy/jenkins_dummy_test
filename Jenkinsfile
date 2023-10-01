@@ -34,14 +34,26 @@ pipeline {
                 echo 'Testing'
                 sh 'ctest -T test --no-compress-output'
             }
-            // post {
-            //     always {
-            //         junit(
-            //             allowEmptyResults: true,
-            //             testResults: '**/test-reports/*.xml'
-            //         )
-            //     }
-            // }        
+            post {
+                always {
+                    archiveArtifacts
+                        artifacts: 'build/Testing/**/*.xml',
+                        fingerprint: true
+                    xunit
+                        testTimeMargin: '3000',
+                        thresholdMode: 1,
+                        thresholds: [
+                        skipped(failureThreshold: '0'),
+                        failed(failureThreshold: '0')
+                        ],
+                    tools: [CTest(
+                        pattern: 'Testing/**/*.xml',
+                        deleteOutputFiles: true,
+                        failIfNotNew: false,
+                        skipNoTestFiles: true,
+                        stopProcessingIfError: true
+                        )]
+            }        
         }
         stage('Deploy') {
             // when {
