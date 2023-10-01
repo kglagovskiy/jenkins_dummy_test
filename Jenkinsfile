@@ -47,7 +47,7 @@ pipeline {
         }
         stage('Deploy') {
             when {
-                expression {return abort_pipeline}
+                expression { abort_pipeline}
             }
             steps {
                 echo 'Deploying'
