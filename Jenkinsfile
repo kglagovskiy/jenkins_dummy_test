@@ -1,3 +1,5 @@
+def resume_pipeline = true
+
 pipeline {
     agent {
         dockerfile {
@@ -7,9 +9,6 @@ pipeline {
     }
     environment {
         EMAIL_TO = 'allerill@gmail.com'
-    
-     	booleanParam name: 'RUN_TESTS', defaultValue: true, description: 'Run Tests?'
-	 	booleanParam name: 'DEPLOY', defaultValue: true, description: 'Deploy Artifacts?'
 	}
     stages {
         stage('Build') {
@@ -26,34 +25,28 @@ pipeline {
             }
         }
         stage('Test') {
-            when {
-                environment name: 'RUN_TESTS', value: 'true'
-            }
             steps {
                 echo 'Testing'
                 cmakeBuild arguments:'-T test',installation: 'InSearchPath'
             }
-            // post {
-            //     always {
-            //         archiveArtifacts artifacts: 'Testing/**/*.xml'
-            //         xunit checksName:'',testTimeMargin: '3000'
-            //             thresholdMode: 1
-            //             thresholds: [
-            //             skipped(failureThreshold: '0')
-            //             failed(failureThreshold: '0')
-            //             ]
-            // //         tools: [CTest(
-            // //             pattern: 'Testing/**/*.xml',
-            // //             deleteOutputFiles: true,
-            // //             failIfNotNew: false,
-            // //             skipNoTestFiles: true,
-            // //             stopProcessingIfError: true
-            // //             )]
-            // }        
+            post {
+                always {
+                    archiveArtifacts artifacts: 'Testing/**/*.xml'
+                    xunit([
+                        CTest(pattern: 'Testing/**/*.xml')
+                    ])
+
+                    // xunit checksName:'',testTimeMargin: '3000'
+                    //     thresholdMode: 1
+                    //     thresholds: [
+                    //     skipped(failureThreshold: '0')
+                    //     failed(failureThreshold: '0')
+                    //     ]
+            }        
         }
         stage('Deploy') {
             when {
-                environment name: 'DEPLOY', value: 'true'
+                expression {return abort_pipeline}
             }
             steps {
                 echo 'Deploying'
