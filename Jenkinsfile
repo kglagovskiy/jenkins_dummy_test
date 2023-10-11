@@ -12,6 +12,9 @@ pipeline {
 	}
     stages {
         stage('Build') {
+            when {
+                expression {return resume_pipeline}
+            }
             steps {
                 echo 'Building'
                 cmakeBuild installation: 'InSearchPath'
@@ -40,7 +43,7 @@ pipeline {
         }
         stage('Deploy') {
             when {
-                expression {abort_pipeline}
+                expression {return resume_pipeline}
             }
             steps {
                 echo 'Deploying'
